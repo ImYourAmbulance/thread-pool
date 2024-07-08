@@ -4,7 +4,7 @@
 #include <fstream>
 
 
-#define PATH "../commands.txt"
+#define PATH "../test_data/commands.txt"
 
 
 int main() {

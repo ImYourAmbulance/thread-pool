@@ -7,9 +7,9 @@ project(thread_pool_proj)
 
 add_compile_definitions(READ_FROM_FILE)
 
-add_executable(test_executable main.cpp)
+add_executable(test_executable src/main.cpp)
 
-add_library(thread_pool_lib thread_pool.h 
-                            thread_pool.cpp)
+add_library(thread_pool_lib src/thread_pool.h 
+                            src/thread_pool.cpp)
 
 target_link_libraries(test_executable thread_pool_lib)
