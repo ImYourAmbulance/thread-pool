@@ -46,7 +46,7 @@ int main() {
             if (input.size() != 2) {
                 continue;
             }
-            pool->AddTask(input[0], (int)input[1]); // TODO: small hack
+            pool->AddTask(input[0], static_cast<int>(input[1])); // TODO: small hack with possible data loss, but let's say priority is not that big of a number
         }
     }
 
