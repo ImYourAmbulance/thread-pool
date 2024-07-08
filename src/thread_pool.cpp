@@ -14,7 +14,9 @@ ThreadPool::ThreadPool(int numThreads)
 ThreadPool::~ThreadPool() {
     run.store(false);
     for (int i = 0; i < threads.size(); ++i) {
-		threads[i].join();
+        if (threads[i].joinable()) {
+            threads[i].join();
+        }
 	}
 }
 
@@ -24,15 +26,15 @@ void ThreadPool::AddTask(uint64_t number, int priority) {
         return;
     }
 
-    std::lock_guard<std::mutex> guard(tasksMutex);
-    tasks.push(Task{number, priority});
+    {
+        std::lock_guard<std::mutex> guard(tasksMutex);
+        tasks.push(Task{ number, priority });
+    }
 }
 
 
 void ThreadPool::ThreadJob()
 {
-    using namespace std::chrono_literals;
-
     while (run.load()) {
         tasksMutex.lock();
         if (tasks.empty()) {

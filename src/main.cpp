@@ -28,6 +28,8 @@ int main() {
         if (!std::getline(file, command)) {
             break;
         }
+        // make reading a bit slower 
+        std::this_thread::sleep_for(5ms);
 #else
         std::getline(std::cin, command);
 #endif
@@ -44,9 +46,11 @@ int main() {
             if (input.size() != 2) {
                 continue;
             }
-            pool->AddTask(input[0], (int)input[1]); // TODO: hack
+            pool->AddTask(input[0], (int)input[1]); // TODO: small hack
         }
     }
+
+    if (pool)
 
     return 0;
 }
