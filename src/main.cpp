@@ -25,7 +25,9 @@ int main() {
 
     while (pool) {
 #ifdef READ_FROM_FILE
-        std::getline(file, command);
+        if (!std::getline(file, command)) {
+            break;
+        }
 #else
         std::getline(std::cin, command);
 #endif
@@ -42,7 +44,7 @@ int main() {
             if (input.size() != 2) {
                 continue;
             }
-            pool->AddTask(input[0], (int)input[1]); // TODO: wild hack
+            pool->AddTask(input[0], (int)input[1]); // TODO: hack
         }
     }
 

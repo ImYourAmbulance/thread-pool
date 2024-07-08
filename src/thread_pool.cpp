@@ -1,10 +1,6 @@
 #include "thread_pool.h"
 
 
-std::mutex tasksMutex;
-std::atomic<bool> run;
-
-
 ThreadPool::ThreadPool(int numThreads) 
 {
     run.store(true);

@@ -7,36 +7,30 @@
 #include <functional>
 
 
-extern std::atomic<bool> run;
-
-
 struct Task {
     uint64_t number;
     int priority;
-};
 
-
-struct TaskComp
-{
-    bool operator()(const Task& lhs, const Task& rhs) const
-    {
-      return lhs.priority < rhs.priority;
+    bool operator<(const Task& other) const {
+        return priority < other.priority;
     }
 };
+
 
 class ThreadPool {
 public:
     ThreadPool(int numThreads = 10);
-
+    ~ThreadPool();
     void AddTask(uint64_t number, int priority);
-
-    void ThreadJob(); 
-
     static std::string FindAllPrimes(uint64_t number);
 
-    ~ThreadPool();
+private:
+    void ThreadJob();
 
 private:
-    std::priority_queue<Task, std::vector<Task>, TaskComp> tasks;
+    std::atomic<bool> run;
+    std::mutex tasksMutex;
+
+    std::priority_queue<Task> tasks;
     std::vector<std::thread> threads;
 };
