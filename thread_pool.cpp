@@ -59,17 +59,6 @@ std::string ThreadPool::FindAllPrimes(uint64_t number)
 {
     std::string res;
 
-    //uint64_t i = 2;
-    //while (number > 1) {
-    //    if (number % i == 0) {
-    //        while (number % i == 0) {
-    //            number /= i;
-    //        }
-    //        res.append(std::to_string(i) + " ");
-    //    }
-    //    ++i;
-    //}
-
     while (number % 2 == 0) {
         res.append(std::to_string(2) + " ");
         number /= 2;
