@@ -15,9 +15,8 @@ The program is better off written in the new C++, because the new C++ has thread
 При завершении работы или перезагрузке для завершения работы потоков, все потоки "будятся" с помощью `cv.notify_all()` и атомик переменная `run` получает значение `false`. 
 
 В основной программе `src/main.cpp` существует 2 варианта работы, что контроллируется макросом `READ_FROM_FILE`, задающимся в `CMakeLists.txt` : 
-- Ввод из консоли 
-- Чтение данных из файла
+- Ввод из консоли (команда сборки: `Cmake -DDEFINE_READ_FROM_FILE=OFF`)
+- Чтение данных из файла (команда сборки:`Cmake -DDEFINE_READ_FROM_FILE=OFF`)
 
 Приложение собирается с помощью CMake и должно работать на Windows, macOS, linux. 
-
 
