@@ -50,7 +50,5 @@ int main() {
         }
     }
 
-    if (pool)
-
     return 0;
 }

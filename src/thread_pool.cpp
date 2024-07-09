@@ -13,6 +13,7 @@ ThreadPool::ThreadPool(int numThreads)
 
 ThreadPool::~ThreadPool() {
     run.store(false);
+    cv.notify_all();
     for (int i = 0; i < threads.size(); ++i) {
         if (threads[i].joinable()) {
             threads[i].join();
@@ -22,29 +23,35 @@ ThreadPool::~ThreadPool() {
 
 
 void ThreadPool::AddTask(uint64_t number, int priority) {
-    if (priority < 0) {
-        return;
-    }
-
     {
         std::lock_guard<std::mutex> guard(tasksMutex);
         tasks.push(Task{ number, priority });
     }
+    cv.notify_one();
 }
 
 
 void ThreadPool::ThreadJob()
 {
     while (run.load()) {
-        tasksMutex.lock();
-        if (tasks.empty()) {
-            tasksMutex.unlock();
-            std::this_thread::sleep_for(200ms);
-            continue;
+
+        Task curTask;
+        {
+            std::unique_lock<std::mutex> lock{ tasksMutex };
+
+            cv.wait(lock, [&]() { return !tasks.empty() || !run.load(); });
+
+            if (!run.load() && tasks.empty()) {
+                return;
+            }
+
+            if (!tasks.empty()) {
+                curTask = tasks.top();
+                tasks.pop();
+            } else {
+                continue;
+            }
         }
-        auto curTask = tasks.top();
-        tasks.pop();
-        tasksMutex.unlock();
 
         std::string res = "Primes of " + std::to_string(curTask.number) + " are: " + FindAllPrimes(curTask.number) + " (Priority = " + std::to_string(curTask.priority) + ")\n";
 
