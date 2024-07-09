@@ -39,13 +39,11 @@ void ThreadPool::ThreadJob()
         {
             std::unique_lock<std::mutex> lock{ tasksMutex };
 
-            cv.wait(lock, [&]() { return !tasks.empty() || !run.load(); });
-
-            if (!run.load() && tasks.empty()) {
-                return;
+            if (tasks.empty()) {
+                cv.wait(lock, [&]() { return !tasks.empty() || !run.load(); });
             }
 
-            if (!tasks.empty()) {
+            if (!tasks.empty() && run.load()) {
                 curTask = tasks.top();
                 tasks.pop();
             } else {
