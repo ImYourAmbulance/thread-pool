@@ -5,7 +5,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(thread_pool_proj)
 
-add_compile_definitions(READ_FROM_FILE)
+OPTION(DEFINE_READ_FROM_FILE "Makes the program read input from the given file" ON) # Enabled by default
+IF(DEFINE_READ_FROM_FILE)
+    add_compile_definitions(READ_FROM_FILE)
+ENDIF(DEFINE_READ_FROM_FILE)
 
 add_executable(test_executable src/main.cpp)
 
